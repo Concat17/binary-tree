@@ -3,4 +3,11 @@ import * as ReactDOM from "react-dom";
 
 import { App } from "./src/App";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+import { TreeContainer } from "./src/containers/treeContainer";
+
+ReactDOM.render(
+  <TreeContainer.Provider>
+    <App />
+  </TreeContainer.Provider>,
+  document.getElementById("root")
+);

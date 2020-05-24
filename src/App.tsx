@@ -1,16 +1,19 @@
+import "./App.scss";
+
 import * as React from "react";
-import {createTree} from "./logic/createTree"
+import { createTree } from "./logic/createTree";
+
+import { TreeContainer } from "./containers/treeContainer";
+
+import ControlPanel from "./components/ControlPanel";
+import Tree from "./components/Tree";
 
 export const App: React.FC<{}> = () => {
-  const tree = createTree(20);
-  tree.addNode(30, tree.root)
-  tree.addNode(10, tree.root)
-  tree.addNode(50, tree.root)
-  console.log(tree);
-
+  const { tree } = TreeContainer.useContainer();
   return (
-    <div className="app">
-      <h1>Halo, there!</h1>
+    <div styleName="app">
+      <ControlPanel />
+      <Tree />
     </div>
   );
 };

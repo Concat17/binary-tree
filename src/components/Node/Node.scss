@@ -1,0 +1,30 @@
+/* your css code */
+.nodeBody {
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+  background-color: #fffff9;
+  border: 2px solid black;
+  border-radius: 100px;
+  display: flex; // make us of Flexbox
+  align-items: center; // does vertically center the desired content
+  justify-content: center; // horizontally centers single line items
+  text-align: center; // optional, but helps horizontally center text that breaks into multiple lines
+}
+
+.root {
+}
+
+.nodeKey {
+  display: inline-block;
+  margin: 0 auto;
+  vertical-align: middle;
+}
+
+.left {
+  margin-right: 100px;
+}
+
+.right {
+  margin-left: 100px;
+}
