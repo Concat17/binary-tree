@@ -4,15 +4,15 @@ import { createContainer } from "unstated-next";
 import { binaryTree } from "../types/binaryTree";
 import Node from "../types/node";
 
-import { createTree, addNode, addNode2 } from "../logic/createTree";
+import { createTree, addNode, addNode2, deleteNode } from "../logic/createTree";
 
 export const TreeContainer = createContainer(() => {
   const [tree, setTree] = useState(createTree(5));
   //tree.addNode(30, tree.root);
-  tree.root = addNode(13, tree.root);
-  tree.root = addNode(10, tree.root);
-  tree.root = addNode(4, tree.root);
-  tree.root = addNode(3, tree.root);
+  // tree.root = addNode(13, tree.root);
+  // tree.root = addNode(10, tree.root);
+  // tree.root = addNode(4, tree.root);
+  // tree.root = addNode(3, tree.root);
   // tree.root = addNode(4, tree.root);
   // tree.root = addNode(3, tree.root);
   //tree.addNode(120, tree.root);
@@ -28,13 +28,21 @@ export const TreeContainer = createContainer(() => {
   // tree.addNode(90, tree.root);
 
   function addTreeNode<T>(value) {
-    //const newTree = JSON.parse(JSON.stringify(tree)) as binaryTree<number>;
     const newTree: binaryTree<number> = {
       root: tree.root,
       addNode: tree.addNode,
     };
-    //newTree.addNode(value, newTree.root);
     newTree.root = addNode(value, newTree.root);
+
+    setTree(newTree);
+  }
+
+  function deleteTreeNode<T>(value) {
+    const newTree: binaryTree<number> = {
+      root: tree.root,
+      addNode: tree.addNode,
+    };
+    newTree.root = deleteNode(value, newTree.root);
 
     setTree(newTree);
   }
@@ -68,5 +76,5 @@ export const TreeContainer = createContainer(() => {
     setTree(newTree);
   }
 
-  return { tree, setTree, addTreeNode, balanceTree };
+  return { tree, setTree, addTreeNode, balanceTree, deleteTreeNode };
 });

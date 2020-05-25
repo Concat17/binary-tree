@@ -6,6 +6,7 @@
   left: 0;
   min-height: 200px;
   margin: auto 0;
+  display: flex;
 
   background-color: #ffdaff;
 }
@@ -31,4 +32,16 @@
     display: block;
   }
   display: block;
+}
+
+.statBlock {
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.stat {
+  max-width: 100px;
+  min-height: 20px;
+
+  background-color: white;
 }

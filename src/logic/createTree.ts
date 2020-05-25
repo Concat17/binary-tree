@@ -25,34 +25,26 @@ export function addNode<T>(key: T, node: Node<T>) {
       ? (node.right = createNode(key))
       : addNode(key, node.right);
   }
-  // if (balance(node) < -1) {
-  //   if (balance(node.left) > 0) {
-  //     const newnodeR = leftRotation2(node.left);
-  //     node.left = newnodeR;
-  //   }
-  //   const newnode = rightRotation2(node);
-  //   console.log("nn", node);
-  //   console.log("nnew", newnode);
-  //   node = newnode;
-  //   // node.count = newnode.count;
-  //   // node.key = newnode.key;
-  //   // node.left = newnode.left;
-  //   // node.right = node;
-  // }
-  // if (balance(node) > 1) {
-  //   if (balance(node.right) < 0) {
-  //     const newnodeR = rightRotation2(node.right);
-
-  //     node.right = newnodeR;
-  //   }
-  //   const newnode = leftRotation2(node);
-  //   console.log("newnode", newnode);
-  //   node = newnode;
-  // }
   if (key === node.key) {
     node.count++;
   }
   return node;
+}
+
+export function deleteNode<T>(k: T, p: Node<T>) {
+  console.log("Delete");
+  if (p === undefined) return undefined;
+  if (k < p.key) {
+    p.left = deleteNode(k, p.left);
+  } else if (k > p.key) {
+    p.right = deleteNode(k, p.right);
+  } else {
+    let q = p.left;
+    let r = p.right;
+    if (q === undefined && r === undefined) return undefined;
+    if (r === undefined) return q;
+    if (q === undefined) return r;
+  }
 }
 
 export function addNode2<T>(key: T, node: Node<T>) {
