@@ -1,0 +1,342 @@
+import './SignIn.scss';
+
+import classnames from 'classnames';
+import * as React from 'react';
+import { useForm } from 'react-hook-form';
+
+import { handleFetchErrors } from '../../../assembly/handleFetchError';
+import { SignInContainer } from '../containers/SignInContainer';
+
+type FormData = {
+  username: string;
+  password: string;
+};
+
+export default function SignUp() {
+  const {
+    signInVisible,
+    setSignInVisibleVisible
+  } = SignInContainer.useContainer();
+
+  const formRef = React.useRef<HTMLFormElement>(null);
+
+  const [signInError, setSignInError] = React.useState(false);
+
+  const { register, handleSubmit, errors } = useForm<FormData>();
+
+  const onSubmit = handleSubmit(async ({ username, password }) => {
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('password', password);
+
+    fetch('/login', {
+      method: 'POST',
+      body: JSON.stringify({ password, username }),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(handleFetchErrors)
+      .then(() => (location.href = '/'))
+      .catch(() => {
+        console.log('error');
+        setSignInError(true);
+      });
+  });
+
+  return signInVisible ? (
+    <div styleName="signIn">
+      <div styleName="formHeader">
+        <span styleName="formTitle">Log In</span>
+        <svg
+          styleName="closeBtn"
+          width="12"
+          height="13"
+          viewBox="0 0 12 13"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          onClick={() => setSignInVisibleVisible(false)}
+        >
+          <path
+            d="M11 1.19152L1 11.1915M1 1.19152L11 11.1915"
+            stroke="black"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
+
+      <form styleName="form" onSubmit={onSubmit} ref={formRef}>
+        <div styleName="inputs">
+          {' '}
+          <div>
+            <span styleName="inputName">Email</span>
+            <input
+              styleName={classnames(
+                'formInput',
+                errors.username && errors.username.type === 'required'
+                  ? 'invalid'
+                  : ''
+              )}
+              id="login"
+              type="text"
+              name="username"
+              ref={register({
+                required: true,
+                minLength: 8,
+                validate: {
+                  match: () => {
+                    return true;
+                  }
+                }
+              })}
+              placeholder="Enter your login"
+            />
+            {errors.username && errors.username.type === 'required' && (
+              <span>This is required</span>
+            )}
+            {errors.username && errors.username.type === 'minLength' && (
+              <span>Too short :(</span>
+            )}
+          </div>
+          <div>
+            <span styleName="inputName">Password</span>
+            <input
+              styleName={classnames('formInput', signInError ? 'invalid' : '')}
+              type="password"
+              name="password"
+              ref={register({ required: true })}
+              placeholder="Enter your password"
+            />
+          </div>
+        </div>
+        <input
+          styleName="formSubmit"
+          type="submit"
+          name="submit"
+          value="Log In"
+        />
+        <div styleName="passwordRecoverWrapper">
+          <span styleName="passwordRecover">
+            If you forgot your password, click here
+          </span>
+        </div>
+      </form>
+    </div>
+  ) : null;
+}
+
+
+// @import '../modal.scss';
+
+$error-color: #ff4545;
+
+.signIn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  width: 360px;
+  //text-align: center;
+  font-size: 16px;
+  padding: 23px 25px 16px;
+
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+}
+.closeBtnWrapper {
+  text-align: right;
+}
+.closeBtn {
+  position: absolute;
+  top: 30px;
+  right: 25px;
+  height: 13px;
+  width: 13px;
+  opacity: 0.25;
+
+  &:hover {
+    opacity: 1;
+  }
+  //margin-top: 220px;
+}
+
+.form {
+  // justify-content: center;
+  // align-items: center;
+  // display: flex;
+  // flex-direction: column;
+}
+
+.formHeader {
+  //margin-top: 25px;
+  text-align: center;
+}
+
+.formTitle {
+  // display: inline-block;
+  // margin-top: 10px;
+  // font-size: 18px;
+  //margin-bottom: 202px;
+
+  font-size: 18px;
+  line-height: 21px;
+  font-weight: normal;
+}
+
+.formInput {
+  width: 100%;
+  height: 45px;
+  font-size: 16px;
+  line-height: 19px;
+
+  border: 1px solid #e4e4e4;
+  box-sizing: border-box;
+  border-radius: 5px;
+
+  padding: 13px 10.5px;
+
+  &::placeholder {
+    color: #dcdcdc;
+
+    font-size: 16px;
+    line-height: 19px;
+
+    //padding: 13px 10.5px;
+  }
+  &.invalid {
+    outline-color: red;
+  }
+}
+
+.formSubmit {
+  font-size: 16px;
+  width: 100%;
+  height: 45px;
+
+  border: 1px solid #e4e4e4;
+  box-sizing: border-box;
+  border-radius: 5px;
+  //margin: 0px 25px;
+  margin-bottom: 16px;
+
+  background: #b9ffdd;
+  &:hover {
+    background: #a8ebca;
+  }
+  &:active {
+    background: #9edfbe;
+  }
+}
+
+.errorWrapper {
+  position: absolute;
+  left: 120%;
+
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+
+  top: 0;
+  bottom: 0;
+  width: 80%;
+  height: 45px;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 16px;
+  color: white;
+
+  background-color: #f64545;
+  box-sizing: border-box;
+  border-radius: 8px;
+
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+
+.inputs {
+  margin-top: 10px;
+  margin-bottom: 25px;
+
+  //width: 100%;
+  div {
+    margin-bottom: 24px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.inputCircle {
+  position: absolute;
+  background-color: $error-color;
+  height: 8px;
+  width: 8px;
+  right: 20px;
+  //top: 18px;
+  top: 30%;
+  bottom: 0;
+  vertical-align: middle;
+  // top: 50%;
+  border-radius: 100px;
+}
+
+.inputName {
+  display: inline-block;
+  font-size: 12px;
+  line-height: 14px;
+  margin-bottom: 7px;
+}
+
+.inputWrapper {
+  position: relative;
+  width: 80%;
+}
+
+.passwordRecoverWrapper {
+  text-align: center;
+}
+
+.passwordRecover {
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 18px;
+  color: #939393;
+  text-align: center;
+}
+
+.error {
+  outline: none;
+  &::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: $error-color;
+    opacity: 1; /* Firefox */
+  }
+
+  :-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: $error-color;
+  }
+
+  ::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: $error-color;
+  }
+  stroke: $error-color;
+}
+
+@media screen and (max-width: 650px) {
+  .signIn {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .signIn {
+    width: 80%;
+  }
+}
